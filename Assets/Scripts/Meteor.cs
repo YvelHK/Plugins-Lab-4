@@ -1,22 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Meteor : MonoBehaviour
 {
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] int HP;
+    private int hitCount = 0;
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.down * Time.deltaTime * 2f);
+        transform.Translate(Vector3.down * Time.deltaTime * 0.5f);
 
         if (transform.position.y < -11f)
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (hitCount >= HP)
         {
             Destroy(this.gameObject);
         }
@@ -28,12 +27,11 @@ public class Meteor : MonoBehaviour
         {
             GameObject.Find("GameManager").GetComponent<GameManager>().gameOver = true;
             Destroy(whatIHit.gameObject);
-            Destroy(this.gameObject);
-        } else if (whatIHit.tag == "Laser")
+        }
+        else if (whatIHit.tag == "Laser")
         {
-            GameObject.Find("GameManager").GetComponent<GameManager>().meteorCount++;
+            hitCount++;
             Destroy(whatIHit.gameObject);
-            Destroy(this.gameObject);
         }
     }
 }
