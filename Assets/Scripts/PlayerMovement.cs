@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -25,14 +21,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
-        transform.Translate(input.GetMoveInput() * Time.deltaTime * speed);
-        if (transform.position.x > horizontalScreenLimit || transform.position.x <= -horizontalScreenLimit)
-        {
-            transform.position = new Vector3(transform.position.x * -1f, transform.position.y, 0);
-        }
-        if (transform.position.y > verticalScreenLimit || transform.position.y <= -verticalScreenLimit)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y * -1, 0);
-        }
+        // Lock movement instead of wraparound to not break cinemachine
+        Vector2 move = input.GetMoveInput();
+        if (Mathf.Abs(transform.position.x) > horizontalScreenLimit && (move.x > 0 == transform.position.x > 0))
+            move.x = 0;
+        if (Mathf.Abs(transform.position.y) > verticalScreenLimit && (move.y > 0 == transform.position.y > 0))
+            move.y = 0;
+
+        transform.Translate(move * Time.deltaTime * speed);
     }
 }

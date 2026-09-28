@@ -1,9 +1,16 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Meteor : MonoBehaviour
 {
     [SerializeField] int HP;
     private int hitCount = 0;
+
+    CinemachineImpulseSource impulse;
+    private void Start()
+    {
+        impulse = GetComponent<CinemachineImpulseSource>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -17,6 +24,7 @@ public class Meteor : MonoBehaviour
 
         if (hitCount >= HP)
         {
+            impulse.GenerateImpulse(0.2f * HP); // Multiplies by HP so larger meteors shake the screen more
             Destroy(this.gameObject);
         }
     }

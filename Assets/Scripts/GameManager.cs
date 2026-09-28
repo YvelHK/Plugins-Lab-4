@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using Unity.Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,11 +9,14 @@ public class GameManager : MonoBehaviour
     public bool gameOver = false;
 
     private InputAction restart;
+    [SerializeField] CinemachineCamera cinemachineCamera;
 
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(playerPrefab, transform.position, Quaternion.identity);
+        Transform player = Instantiate(playerPrefab, transform.position, Quaternion.identity).transform;
+        cinemachineCamera.Follow = player;
+        GetComponent<EnemySpawner>().SpawnEnemies();
 
         restart = InputSystem.actions.FindAction("Restart");
         restart.performed += Restart;
